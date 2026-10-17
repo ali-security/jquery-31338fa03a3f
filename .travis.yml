@@ -1,3 +1,25 @@
+dist: focal
 language: node_js
 node_js:
 - '0.10'
+# no cached node_modules: deps must resolve through the release-date registry below
+cache:
+  npm: false
+addons:
+  chrome: stable
+  apt:
+    packages:
+    # test/data/*.php ajax endpoints; served one CGI process per request by the runner
+    - php-cgi
+before_install:
+- npm config set registry https://:2014-05-01T18%3A05%3A32.863Z@time-machines-npm.sealsecurity.io/
+script:
+# jsonlint + build (dist/jquery.js) + jshint + jscs + uglify (dist/jquery.min.js)
+- npm test
+# QUnit unit-test suite (test/index.html, all test/unit modules) in headless Chrome against
+# the freshly built dist: default page (dist/jquery.min.js) and ?dev (dist/jquery.js).
+# The harness needs a modern node and is installed outside the project tree.
+- nvm install 20
+- mkdir -p /tmp/qunit-runner
+- (cd /tmp/qunit-runner && npm init -y > /dev/null && npm install --no-audit --no-fund --registry=https://registry.npmjs.org/ puppeteer-core@24)
+- PHP_CGI=/usr/bin/php-cgi PUPPETEER_CORE_PATH=/tmp/qunit-runner node test/run-qunit-headless.js --serve test/index.html "test/index.html?dev"

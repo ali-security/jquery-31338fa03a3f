@@ -287,7 +287,9 @@ this.loadTests = function() {
 			"unit/ajax.js",
 			"unit/effects.js",
 			"unit/offset.js",
-			"unit/dimensions.js"
+			"unit/dimensions.js",
+			// Sealed build: also run the deprecated-API module
+			"unit/deprecated.js"
 		];
 
 		// Ensure load order (to preserve test numbers)

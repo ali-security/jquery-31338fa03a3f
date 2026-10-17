@@ -1,0 +1,127 @@
+name: build
+
+# Build-and-pack only: reproduces the published jquery-1.11.1.tgz.
+# Tests run on Travis (.travis.yml), not here.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      NODE_VERSION: "0.10.48"
+      # npm registry as of the 1.11.1 release (2014-05-01), so devDependency
+      # ranges resolve to the versions used for the published build.
+      NPM_TIME_MACHINE: "https://:2014-05-01T18%3A05%3A32.863Z@time-machines-npm.sealsecurity.io/"
+      # Build timestamp of the published 1.11.1 artifacts
+      # (src/intro.js "Date: @DATE" and the uglify "(c) 2005, <year>" banner).
+      BUILD_FAKETIME: "2014-05-01 17:42:00"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install libfaketime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y faketime
+
+      - name: Install Node.js ${{ env.NODE_VERSION }} (upstream Travis uses node 0.10)
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/node"
+          tarball="node-v${NODE_VERSION}-linux-x64.tar.gz"
+          mkdir -p "$dir"
+          cd "$RUNNER_TEMP"
+          curl -fsSLO "https://nodejs.org/dist/v${NODE_VERSION}/${tarball}"
+          curl -fsSLO "https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt"
+          grep " ${tarball}\$" SHASUMS256.txt | sha256sum -c -
+          tar -xzf "$tarball" -C "$dir" --strip-components=1
+          echo "$dir/bin" >> "$GITHUB_PATH"
+
+      - name: Show toolchain versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies (registry time machine)
+        run: |
+          npm config set registry "$NPM_TIME_MACHINE"
+          npm config set cafile /etc/ssl/certs/ca-certificates.crt
+          npm install
+
+      - name: Build (grunt default task, clock pinned to the 1.11.1 build time)
+        run: |
+          TZ=UTC faketime "$BUILD_FAKETIME" ./node_modules/.bin/grunt
+          grep -n " \* Date: " dist/jquery.js
+          head -c 120 dist/jquery.min.js; echo
+
+      - name: Generate dist/cdn release copies (makeReleaseCopies from build/release.js)
+        run: |
+          cat > "$RUNNER_TEMP/make-release-copies.js" <<'EOF'
+          // Inline equivalent of makeReleaseCopies() in build/release.js
+          // (that file needs the jquery-release framework). Release.newVersion
+          // is the package.json version; this is not a pre-release.
+          var fs = require( "fs" ),
+            newVersion = JSON.parse( fs.readFileSync( "package.json", "utf8" ) ).version,
+            devFile = "dist/jquery.js",
+            minFile = "dist/jquery.min.js",
+            mapFile = "dist/jquery.min.map",
+            cdnFolder = "dist/cdn",
+            releaseFiles = {
+              "jquery-VER.js": devFile,
+              "jquery-VER.min.js": minFile,
+              "jquery-VER.min.map": mapFile,
+              "jquery.js": devFile,
+              "jquery.min.js": minFile,
+              "jquery.min.map": mapFile,
+              "jquery-latest.js": devFile,
+              "jquery-latest.min.js": minFile,
+              "jquery-latest.min.map": mapFile
+            };
+          if ( !fs.existsSync( cdnFolder ) ) {
+            fs.mkdirSync( cdnFolder );
+          }
+          Object.keys( releaseFiles ).forEach(function( key ) {
+            var text,
+              builtFile = releaseFiles[ key ],
+              unpathedFile = key.replace( /VER/g, newVersion ),
+              releaseFile = cdnFolder + "/" + unpathedFile;
+            if ( /\.map$/.test( releaseFile ) ) {
+              text = fs.readFileSync( builtFile, "utf8" )
+                .replace( /"file":"([^"]+)","sources":\["([^"]+)"\]/,
+                  "\"file\":\"" + unpathedFile.replace( /\.min\.map/, ".min.js" ) +
+                  "\",\"sources\":[\"" + unpathedFile.replace( /\.min\.map/, ".js" ) + "\"]" );
+              fs.writeFileSync( releaseFile, text );
+            } else if ( /\.min\.js$/.test( releaseFile ) ) {
+              text = fs.readFileSync( builtFile, "utf8" )
+                .replace( /\/\/# sourceMappingURL=\S+/, "" );
+              fs.writeFileSync( releaseFile, text );
+            } else {
+              fs.writeFileSync( releaseFile, fs.readFileSync( builtFile ) );
+            }
+            console.log( "Created " + releaseFile );
+          });
+          EOF
+          node "$RUNNER_TEMP/make-release-copies.js"
+          ls -l dist dist/cdn
+
+      - name: Pack
+        run: |
+          set -euo pipefail
+          # .npmignore does not exclude .github/, which did not exist upstream
+          # at 1.11.1; drop it from the throwaway checkout so the tarball
+          # content matches the published one.
+          rm -rf .github
+          npm pack
+          mkdir -p pack-out
+          mv jquery-1.11.1.tgz pack-out/
+          tar -tzf pack-out/jquery-1.11.1.tgz | sort
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jquery-1.11.1
+          path: pack-out/jquery-1.11.1.tgz
+          if-no-files-found: error
