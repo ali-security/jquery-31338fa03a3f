@@ -90,9 +90,9 @@ function testText( valueObj ) {
 	equal( $multipleElements.eq(1).text(), expected, "text() updates multiple elements (#11809)" );
 
 	// Prevent memory leaks #11809
-	$childDiv = jQuery( "<div/>" );
+	$childDiv = jQuery( "<div></div>" );
 	$childDiv.data("leak", true);
-	$parentDiv = jQuery( "<div/>" );
+	$parentDiv = jQuery( "<div></div>" );
 	$parentDiv.append( $childDiv );
 	$parentDiv.text("Dry off");
 
@@ -245,10 +245,10 @@ function testAppend( valueObj ) {
 		strictEqual( e.message || e, undefined, message );
 	}
 
-	jQuery("<fieldset/>").appendTo("#form").append( valueObj("<legend id='legend'>test</legend>") );
+	jQuery("<fieldset></fieldset>").appendTo("#form").append( valueObj("<legend id='legend'>test</legend>") );
 	t( "Append legend", "#legend", [ "legend" ] );
 
-	$map = jQuery("<map/>").append( valueObj("<area id='map01' shape='rect' coords='50,50,150,150' href='http://www.jquery.com/' alt='jQuery'>") );
+	$map = jQuery("<map></map>").append( valueObj("<area id='map01' shape='rect' coords='50,50,150,150' href='http://www.jquery.com/' alt='jQuery'>") );
 
 	equal( $map[ 0 ].childNodes.length, 1, "The area was inserted." );
 	equal( $map[ 0 ].firstChild.nodeName.toLowerCase(), "area", "The area was inserted." );
@@ -268,7 +268,7 @@ function testAppend( valueObj ) {
 		ok( jQuery.parseHTML( "<" + name + "/>" ).length, name + " wrapped correctly" );
 	});
 
-	jQuery("#table colgroup").append( valueObj("<col/>") );
+	jQuery("#table colgroup").append( valueObj("<col></col>") );
 	equal( jQuery("#table colgroup col").length, 1, "Append col" );
 
 	jQuery("#form")
@@ -276,12 +276,12 @@ function testAppend( valueObj ) {
 		.append( valueObj("<select id='appendSelect2'><option>Test</option></select>") );
 	t( "Append Select", "#appendSelect1, #appendSelect2", [ "appendSelect1", "appendSelect2" ] );
 
-	equal( "Two nodes", jQuery("<div />").append( "Two", " nodes" ).text(), "Appending two text nodes (#4011)" );
-	equal( jQuery("<div />").append( "1", "", 3 ).text(), "13", "If median is false-like value, subsequent arguments should not be ignored" );
+	equal( "Two nodes", jQuery("<div></div>").append( "Two", " nodes" ).text(), "Appending two text nodes (#4011)" );
+	equal( jQuery("<div></div>").append( "1", "", 3 ).text(), "13", "If median is false-like value, subsequent arguments should not be ignored" );
 
 	// using contents will get comments regular, text, and comment nodes
 	j = jQuery("#nonnodes").contents();
-	d = jQuery("<div/>").appendTo("#nonnodes").append( j );
+	d = jQuery("<div></div>").appendTo("#nonnodes").append( j );
 
 	equal( jQuery("#nonnodes").length, 1, "Check node,textnode,comment append moved leaving just the div" );
 	equal( d.contents().length, 3, "Check node,textnode,comment append works" );
@@ -298,12 +298,12 @@ function testAppend( valueObj ) {
 	$radioChecked.trigger("click");
 	$radioUnchecked[ 0 ].checked = false;
 
-	jQuery("<div/>").insertBefore($radioParent).append($radioParent);
+	jQuery("<div></div>").insertBefore($radioParent).append($radioParent);
 
 	equal( $radioChecked[ 0 ].checked, true, "Reappending radios uphold which radio is checked" );
 	equal( $radioUnchecked[ 0 ].checked, false, "Reappending radios uphold not being checked" );
 
-	equal( jQuery("<div/>").append( valueObj("option<area/>") )[ 0 ].childNodes.length, 2, "HTML-string with leading text should be processed correctly" );
+	equal( jQuery("<div></div>").append( valueObj("option<area></area>") )[ 0 ].childNodes.length, 2, "HTML-string with leading text should be processed correctly" );
 }
 
 test( "append(String|Element|Array<Element>|jQuery)", function() {
@@ -620,7 +620,7 @@ test( "appendTo(jQuery)", function() {
 	jQuery("#select1").appendTo("#foo");
 	t( "Append select", "#foo select", [ "select1" ] );
 
-	div = jQuery("<div/>").on( "click", function() {
+	div = jQuery("<div></div>").on( "click", function() {
 		ok( true, "Running a cloned click." );
 	});
 	div.appendTo("#qunit-fixture, #moretests");
@@ -628,7 +628,7 @@ test( "appendTo(jQuery)", function() {
 	jQuery("#qunit-fixture div").last().trigger("click");
 	jQuery("#moretests div").last().trigger("click");
 
-	div = jQuery("<div/>").appendTo("#qunit-fixture, #moretests");
+	div = jQuery("<div></div>").appendTo("#qunit-fixture, #moretests");
 
 	equal( div.length, 2, "appendTo returns the inserted elements" );
 
@@ -637,7 +637,7 @@ test( "appendTo(jQuery)", function() {
 	ok( jQuery("#qunit-fixture div").last().hasClass("test"), "appendTo element was modified after the insertion" );
 	ok( jQuery("#moretests div").last().hasClass("test"), "appendTo element was modified after the insertion" );
 
-	div = jQuery("<div/>");
+	div = jQuery("<div></div>");
 	jQuery("<span>a</span><b>b</b>").filter("span").appendTo( div );
 
 	equal( div.children().length, 1, "Make sure the right number of children were inserted." );
@@ -937,7 +937,7 @@ test( "before(no-op)", function() {
 	expect( 2 );
 
 	var set;
-	set = jQuery("<div/>").before("<span>test</span>");
+	set = jQuery("<div></div>").before("<span>test</span>");
 	equal( set[ 0 ].nodeName.toLowerCase(), "div", "Insert before a disconnected node should be a no-op" );
 	equal( set.length, 1, "Insert the element before the disconnected node. should be a no-op" );
 });
@@ -956,8 +956,8 @@ test( ".before() and .after() disconnected node", function() {
 
   expect(2);
 
-  equal( jQuery("<input type='checkbox'/>").before("<div/>").length, 1, "before() on disconnected node is no-op" );
-	equal( jQuery("<input type='checkbox'/>").after("<div/>").length, 1, "after() on disconnected node is no-op" );
+  equal( jQuery("<input type='checkbox'/>").before("<div></div>").length, 1, "before() on disconnected node is no-op" );
+	equal( jQuery("<input type='checkbox'/>").after("<div></div>").length, 1, "after() on disconnected node is no-op" );
 });
 
 test( "insert with .before() on disconnected node last", function() {
@@ -966,7 +966,7 @@ test( "insert with .before() on disconnected node last", function() {
 
   var expectedBefore = "This is a normal link: bugaYahoo";
 
-  jQuery("#yahoo").add("<span/>").before("<b>buga</b>");
+  jQuery("#yahoo").add("<span></span>").before("<b>buga</b>");
 	equal( jQuery("#en").text(), expectedBefore, "Insert String before with disconnected node last" );
 });
 
@@ -976,7 +976,7 @@ test( "insert with .before() on disconnected node first", function() {
 
   var expectedBefore = "This is a normal link: bugaYahoo";
 
-	jQuery("<span/>").add("#yahoo").before("<b>buga</b>");
+	jQuery("<span></span>").add("#yahoo").before("<b>buga</b>");
 	equal( jQuery("#en").text(), expectedBefore, "Insert String before with disconnected node first" );
 });
 
@@ -986,7 +986,7 @@ test( "insert with .before() on disconnected node last", function() {
 
   var expectedAfter = "This is a normal link: Yahoobuga";
 
-	jQuery("#yahoo").add("<span/>").after("<b>buga</b>");
+	jQuery("#yahoo").add("<span></span>").after("<b>buga</b>");
 	equal( jQuery("#en").text(), expectedAfter, "Insert String after with disconnected node last" );
 });
 
@@ -996,7 +996,7 @@ test( "insert with .before() on disconnected node last", function() {
 
   var expectedAfter = "This is a normal link: Yahoobuga";
 
-	jQuery("<span/>").add("#yahoo").after("<b>buga</b>");
+	jQuery("<span></span>").add("#yahoo").after("<b>buga</b>");
 	equal( jQuery("#en").text(), expectedAfter, "Insert String after with disconnected node first" );
 });
 
@@ -1116,7 +1116,7 @@ test( ".after(disconnected node)", function() {
 
   expect( 2 );
 
-  var set = jQuery("<div/>").before("<span>test</span>");
+  var set = jQuery("<div></div>").before("<span>test</span>");
 	equal( set[ 0 ].nodeName.toLowerCase(), "div", "Insert after a disconnected node should be a no-op" );
 	equal( set.length, 1, "Insert the element after the disconnected node should be a no-op" );
 });
@@ -1199,10 +1199,10 @@ function testReplaceWith( val ) {
 	deepEqual( jQuery("#anchor1").contents().get(), [ tmp ], "Replace text node with element" );
 
 
-	tmp = jQuery("<div/>").appendTo("#qunit-fixture").on( "click", function() {
+	tmp = jQuery("<div></div>").appendTo("#qunit-fixture").on( "click", function() {
 		ok( true, "Newly bound click run." );
 	});
-	y = jQuery("<div/>").appendTo("#qunit-fixture").on( "click", function() {
+	y = jQuery("<div></div>").appendTo("#qunit-fixture").on( "click", function() {
 		ok( false, "Previously bound click run." );
 	});
 	child = y.append("<b>test</b>").find("b").on( "click", function() {
@@ -1217,7 +1217,7 @@ function testReplaceWith( val ) {
 	child.trigger("click"); // Shouldn't be run
 
 
-	y = jQuery("<div/>").appendTo("#qunit-fixture").on( "click", function() {
+	y = jQuery("<div></div>").appendTo("#qunit-fixture").on( "click", function() {
 		ok( false, "Previously bound click run." );
 	});
 	child2 = y.append("<u>test</u>").find("u").on( "click", function() {
@@ -1230,14 +1230,14 @@ function testReplaceWith( val ) {
 	child2.trigger("click");
 
 
-	set = jQuery("<div/>").replaceWith( val("<span>test</span>") );
+	set = jQuery("<div></div>").replaceWith( val("<span>test</span>") );
 	equal( set[0].nodeName.toLowerCase(), "div", "No effect on a disconnected node." );
 	equal( set.length, 1, "No effect on a disconnected node." );
 	equal( set[0].childNodes.length, 0, "No effect on a disconnected node." );
 
 
 	child = jQuery("#qunit-fixture").children().first();
-	$div = jQuery("<div class='pathological'/>").insertBefore( child );
+	$div = jQuery("<div class='pathological'></div>").insertBefore( child );
 	$div.replaceWith( $div );
 	deepEqual( jQuery( ".pathological", "#qunit-fixture" ).get(), $div.get(),
 		"Self-replacement" );
@@ -1292,7 +1292,7 @@ test( "replaceWith(string) for more than one element", function() {
 });
 
 test( "Empty replaceWith (#13401; #13596)", 8, function() {
-	var $el = jQuery( "<div/>" ),
+	var $el = jQuery( "<div></div>" ),
 		tests = {
 			"empty string": "",
 			"empty array": [],
@@ -1303,9 +1303,9 @@ test( "Empty replaceWith (#13401; #13596)", 8, function() {
 		};
 
 	jQuery.each( tests, function( label, input ) {
-		$el.html( "<a/>" ).children().replaceWith( input );
+		$el.html( "<a></a>" ).children().replaceWith( input );
 		strictEqual( $el.html(), "", "replaceWith(" + label + ")" );
-		$el.html( "<b/>" ).children().replaceWith(function() { return input; });
+		$el.html( "<b></b>" ).children().replaceWith(function() { return input; });
 		strictEqual( $el.html(), "", "replaceWith(function returning " + label + ")" );
 	});
 });
@@ -1419,7 +1419,7 @@ test( "clone()", function() {
 	div.remove();
 
 	// Verify that cloned children can keep event listeners
-	div = jQuery("<div/>").append([ document.createElement("table"), document.createElement("table") ]);
+	div = jQuery("<div></div>").append([ document.createElement("table"), document.createElement("table") ]);
 	div.find("table").on( "click", function() {
 		ok( true, "Bound event still exists." );
 	});
@@ -1446,7 +1446,7 @@ test( "clone()", function() {
 	div.remove();
 
 	// Test both html() and clone() for <embed> and <object> types
-	div = jQuery("<div/>").html("<embed height='355' width='425' src='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'></embed>");
+	div = jQuery("<div></div>").html("<embed height='355' width='425' src='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'></embed>");
 
 	clone = div.clone( true );
 	equal( clone.length, 1, "One element cloned" );
@@ -1456,7 +1456,7 @@ test( "clone()", function() {
 	// this is technically an invalid object, but because of the special
 	// classid instantiation it is the only kind that IE has trouble with,
 	// so let's test with it too.
-	div = jQuery("<div/>").html("<object height='355' width='425' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'>  <param name='movie' value='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='wmode' value='transparent'> </object>");
+	div = jQuery("<div></div>").html("<object height='355' width='425' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'>  <param name='movie' value='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='wmode' value='transparent'> </object>");
 
 	clone = div.clone( true );
 	equal( clone.length, 1, "One element cloned" );
@@ -1482,14 +1482,14 @@ test( "clone()", function() {
 	})();
 
 	// and here's a valid one.
-	div = jQuery("<div/>").html("<object height='355' width='425' type='application/x-shockwave-flash' data='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='movie' value='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='wmode' value='transparent'> </object>");
+	div = jQuery("<div></div>").html("<object height='355' width='425' type='application/x-shockwave-flash' data='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='movie' value='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='wmode' value='transparent'> </object>");
 
 	clone = div.clone(true);
 	equal( clone.length, 1, "One element cloned" );
 	equal( clone.html(), div.html(), "Element contents cloned" );
 	equal( clone[ 0 ].nodeName.toUpperCase(), "DIV", "DIV element cloned" );
 
-	div = jQuery("<div/>").data({ "a": true });
+	div = jQuery("<div></div>").data({ "a": true });
 	clone = div.clone( true );
 	equal( clone.data("a"), true, "Data cloned." );
 	clone.data( "a", false );
@@ -1615,12 +1615,12 @@ function testHtml( valueObj ) {
 		div = jQuery("<div></div>"),
 		fixture = jQuery("#qunit-fixture");
 
-	div.html( valueObj("<div id='parent_1'><div id='child_1'/></div><div id='parent_2'/>") );
+	div.html( valueObj("<div id='parent_1'><div id='child_1'></div></div><div id='parent_2'></div>") );
 	equal( div.children().length, 2, "Found children" );
 	equal( div.children().children().length, 1, "Found grandchild" );
 
 	actual = []; expected = [];
-	tmp = jQuery("<map/>").html( valueObj("<area alt='area'/>") ).each(function() {
+	tmp = jQuery("<map></map>").html( valueObj("<area alt='area'></area>") ).each(function() {
 		expected.push("AREA");
 		actual.push( childNodeNames( this ) );
 	});
@@ -1675,7 +1675,7 @@ function testHtml( valueObj ) {
 	equal( expected.length, 1, "Expecting one parent" );
 	deepEqual( actual, expected, "Found the inserted style element" );
 
-	fixture.html( valueObj("<select/>") );
+	fixture.html( valueObj("<select></select>") );
 	jQuery("#qunit-fixture select").html( valueObj("<option>O1</option><option selected='selected'>O2</option><option>O3</option>") );
 	equal( jQuery("#qunit-fixture select").val(), "O2", "Selected option correct" );
 
@@ -1787,7 +1787,7 @@ test( "html(Function) with incoming value -- jQuery.contents()", function() {
 
 	equal( j.html().replace( / xmlns="[^"]+"/g, "" ).toLowerCase(), "<b>bold</b>", "Check node,textnode,comment with html()" );
 
-	$div = jQuery("<div />");
+	$div = jQuery("<div></div>");
 
 	equal( $div.html(function( i, val ) {
 		equal( val, "", "Make sure the incoming value is correct." );
@@ -1799,7 +1799,7 @@ test( "html(Function) with incoming value -- jQuery.contents()", function() {
 		return 0;
 	}).html(), "0", "Setting a zero as html" );
 
-	$div2 = jQuery("<div/>");
+	$div2 = jQuery("<div></div>");
 	insert = "&lt;div&gt;hello1&lt;/div&gt;";
 	equal( $div2.html(function( i, val ) {
 		equal( val, "", "Make sure the incoming value is correct." );
@@ -2089,7 +2089,7 @@ test( "jQuery.buildFragment - no plain-text caching (Bug #6779)", function() {
 
 	// DOM manipulation fails if added text matches an Object method
 	var i,
-		$f = jQuery( "<div />" ).appendTo( "#qunit-fixture" ),
+		$f = jQuery( "<div></div>" ).appendTo( "#qunit-fixture" ),
 		bad = [ "start-", "toString", "hasOwnProperty", "append", "here&there!", "-end" ];
 
 	for ( i = 0; i < bad.length; i++ ) {
@@ -2231,7 +2231,7 @@ test( "Guard against exceptions when clearing safeChildNodes", function() {
 	var div;
 
 	try {
-		div = jQuery("<div/><hr/><code/><b/>");
+		div = jQuery("<div></div><hr/><code></code><b></b>");
 	} catch(e) {}
 
 	ok( div && div.jquery, "Created nodes safely, guarded against exceptions on safeChildNodes[ -1 ]" );
@@ -2241,11 +2241,11 @@ test( "Ensure oldIE creates a new set on appendTo (#8894)", function() {
 
 	expect( 5 );
 
-	strictEqual( jQuery("<div/>").clone().addClass("test").appendTo("<div/>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.clone" );
-	strictEqual( jQuery("<div/>").find("p").end().addClass("test").appendTo("<div/>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.fn.find" );
-	strictEqual( jQuery("<div/>").text("test").addClass("test").appendTo("<div/>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.fn.text" );
-	strictEqual( jQuery("<bdi/>").clone().addClass("test").appendTo("<div/>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after clone html5 element" );
-	strictEqual( jQuery("<p/>").appendTo("<div/>").end().length, jQuery("<p>test</p>").appendTo("<div/>").end().length, "Elements created with createElement and with createDocumentFragment should be treated alike" );
+	strictEqual( jQuery("<div></div>").clone().addClass("test").appendTo("<div></div>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.clone" );
+	strictEqual( jQuery("<div></div>").find("p").end().addClass("test").appendTo("<div></div>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.fn.find" );
+	strictEqual( jQuery("<div></div>").text("test").addClass("test").appendTo("<div></div>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after jQuery.fn.text" );
+	strictEqual( jQuery("<bdi></bdi>").clone().addClass("test").appendTo("<div></div>").end().end().hasClass("test"), false, "Check jQuery.fn.appendTo after clone html5 element" );
+	strictEqual( jQuery("<p></p>").appendTo("<div></div>").end().length, jQuery("<p>test</p>").appendTo("<div></div>").end().length, "Elements created with createElement and with createDocumentFragment should be treated alike" );
 });
 
 test( "html() - script exceptions bubble (#11743)", function() {
@@ -2331,7 +2331,7 @@ test( "script evaluation (#11795)", function() {
 			"<script>ok( true, 'evaluated: inner no type' );</script>",
 		"</div>"
 	].join(""));
-	scriptsIn.appendTo( jQuery("<div class='detached'/>") );
+	scriptsIn.appendTo( jQuery("<div class='detached'></div>") );
 	objGlobal.ok = isOk;
 
 	scriptsOut = fixture.append( scriptsIn ).find("script");
@@ -2348,7 +2348,7 @@ test( "script evaluation (#11795)", function() {
 
 	if ( jQuery.ajax ) {
 		Globals.register("testBar");
-		jQuery("#qunit-fixture").append( "<script src='" + url("data/testbar.php") + "'/>" );
+		jQuery("#qunit-fixture").append( "<script src='" + url("data/testbar.php") + "'></script>" );
 		strictEqual( window["testBar"], "bar", "Global script evaluation" );
 	} else {
 		ok( true, "No jQuery.ajax" );
@@ -2370,7 +2370,7 @@ test( "jQuery._evalUrl (#12838)", function() {
 		equal( ( input.url || input ).slice( -1 ), expectedArgument, message );
 		expectedArgument++;
 	};
-	jQuery("#qunit-fixture").append("<script src='1'/><script src='2'/>");
+	jQuery("#qunit-fixture").append("<script src='1'></script><script src='2'></script>");
 	equal( expectedArgument, 3, "synchronous execution" );
 
 	message = "custom implementation";
@@ -2379,7 +2379,7 @@ test( "jQuery._evalUrl (#12838)", function() {
 	jQuery.ajax = function( options ) {
 		strictEqual( options, {}, "Unexpected call to jQuery.ajax" );
 	};
-	jQuery("#qunit-fixture").append("<script src='3'/><script src='4'/>");
+	jQuery("#qunit-fixture").append("<script src='3'></script><script src='4'></script>");
 
 	jQuery.ajax = ajax;
 	jQuery._evalUrl = evalUrl;
@@ -2422,7 +2422,7 @@ test( "insertAfter, insertBefore, etc do not work when destination is original e
 test( "Index for function argument should be received (#13094)", 2, function() {
 	var i = 0;
 
-	jQuery("<div/><div/>").before(function( index ) {
+	jQuery("<div></div><div></div>").before(function( index ) {
 		equal( index, i++, "Index should be correct" );
 	});
 
@@ -2435,4 +2435,58 @@ test( "Make sure jQuery.fn.remove can work on elements in documentFragment", 1, 
 	jQuery( div ).remove();
 
 	equal( fragment.childNodes.length, 0, "div element was removed from documentFragment" );
+});
+
+test( "Self-closing tags are not expanded by html(), append() or jQuery(html) (CVE-2020-11022)", function() {
+
+	expect( 18 );
+
+	var payloads = {
+			"style raw text": "<style><style/><img src=x></style>",
+			"textarea RCDATA": "<textarea><textarea/><img src=x></textarea>",
+			"comment": "<!--<x--/><img src=x>-->"
+		};
+
+	jQuery.each( payloads, function( label, payload ) {
+		var $div,
+			reference = document.createElement("div");
+
+		// What the browser itself parses, without any jQuery rewriting
+		reference.innerHTML = payload;
+
+		$div = jQuery("<div></div>").html( payload );
+		equal( $div.html(), reference.innerHTML, "html(): markup is not rewritten - " + label );
+		equal( $div.find("img").length, 0, "html(): no element breaks out - " + label );
+
+		$div = jQuery("<div></div>").append( payload );
+		equal( $div.html(), reference.innerHTML, "append(): markup is not rewritten - " + label );
+		equal( $div.find("img").length, 0, "append(): no element breaks out - " + label );
+
+		$div = jQuery("<div></div>").append( jQuery( payload ) );
+		equal( $div.html(), reference.innerHTML, "jQuery(html): markup is not rewritten - " + label );
+		equal( $div.find("img").length, 0, "jQuery(html): no element breaks out - " + label );
+	});
+});
+
+asyncTest( "Handlers hidden in raw text or comments are not executed (CVE-2020-11022)", function() {
+
+	expect( 1 );
+
+	var fixture = jQuery("#qunit-fixture"),
+		img = "<img src=x onerror='cve202011022Executed = true;'>";
+
+	Globals.register("cve202011022Executed");
+	jQuery.globalEval("cve202011022Executed = false;");
+
+	fixture.append( jQuery("<div></div>").html( "<style><style/>" + img + "</style>" ) );
+	fixture.append( jQuery("<div></div>").html( "<textarea><textarea/>" + img + "</textarea>" ) );
+	fixture.append( jQuery("<div></div>").html( "<!--<x--/>" + img + "-->" ) );
+	fixture.append( "<div><textarea><textarea/>" + img + "</textarea></div>" );
+	fixture.append( "<div><!--<x--/>" + img + "--></div>" );
+	jQuery( "<style><style/>" + img + "</style>" ).appendTo( fixture );
+
+	window.setTimeout(function() {
+		strictEqual( window.cve202011022Executed, false, "onerror handler was not executed" );
+		start();
+	}, 2000 );
 });

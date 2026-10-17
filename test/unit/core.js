@@ -21,9 +21,9 @@ test("jQuery()", function() {
 
 	var elem, i,
 		obj = jQuery("div"),
-		code = jQuery("<code/>"),
+		code = jQuery("<code></code>"),
 		img = jQuery("<img/>"),
-		div = jQuery("<div/><hr/><code/><b/>"),
+		div = jQuery("<div></div><hr/><code></code><b/>"),
 		exec = false,
 		lng = "",
 		expected = 22,
@@ -107,7 +107,7 @@ test("jQuery()", function() {
 	elem = jQuery("\n\n<em>world</em>")[0];
 	equal( elem.nodeName.toLowerCase(), "em", "leading newlines" );
 
-	elem = jQuery("<div/>", attrObj );
+	elem = jQuery("<div></div>", attrObj );
 
 	if ( jQuery.fn.width ) {
 		equal( elem[0].style.width, "10px", "jQuery() quick setter width");
@@ -611,7 +611,7 @@ test("jQuery('html')", function() {
 
 	ok( jQuery("<link rel='stylesheet'/>")[0], "Creating a link" );
 
-	ok( !jQuery("<script/>")[0].parentNode, "Create a script" );
+	ok( !jQuery("<script></script>")[0].parentNode, "Create a script" );
 
 	ok( jQuery("<input/>").attr("type", "hidden"), "Create an input and set the type." );
 
@@ -652,8 +652,8 @@ test("jQuery('massive html #7990')", function() {
 test("jQuery('html', context)", function() {
 	expect(1);
 
-	var $div = jQuery("<div/>")[0],
-		$span = jQuery("<span/>", $div);
+	var $div = jQuery("<div></div>")[0],
+		$span = jQuery("<span></span>", $div);
 	equal($span.length, 1, "verify a span created with a div context works, #1763");
 });
 
@@ -1338,7 +1338,7 @@ test("jQuery.parseHTML", function() {
 	equal( jQuery.parseHTML("text")[0].nodeType, 3, "Parsing text returns a text node" );
 	equal( jQuery.parseHTML( "\t<div></div>" )[0].nodeValue, "\t", "Preserve leading whitespace" );
 
-	equal( jQuery.parseHTML(" <div/> ")[0].nodeType, 3, "Leading spaces are treated as text nodes (#11290)" );
+	equal( jQuery.parseHTML(" <div></div> ")[0].nodeType, 3, "Leading spaces are treated as text nodes (#11290)" );
 
 	html = jQuery.parseHTML( "<div>test div</div>" );
 	equal( html[ 0 ].parentNode.nodeType, 11, "parentNode should be documentFragment" );

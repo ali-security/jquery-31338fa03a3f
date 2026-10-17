@@ -13,7 +13,7 @@ test("css(String|Hash)", function() {
 	notEqual( $child.css("width"), "20px", "Retrieving a width percentage on the child of a hidden div returns percentage" );
 	notEqual( $child.css("height"), "20px", "Retrieving a height percentage on the child of a hidden div returns percentage" );
 
-	div = jQuery( "<div/>" );
+	div = jQuery( "<div></div>" );
 
 	// These should be "auto" (or some better value)
 	// temporarily provide "0px" for backwards compat
@@ -25,7 +25,7 @@ test("css(String|Hash)", function() {
 	equal( div.css("width"), "4px", "Width on disconnected node." );
 	equal( div.css("height"), "4px", "Height on disconnected node." );
 
-	div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'/><div style='height:20px;'></div></div>").appendTo("body");
+	div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'></textarea><div style='height:20px;'></div></div>").appendTo("body");
 
 	equal( div2.find("input").css("height"), "20px", "Height on hidden input." );
 	equal( div2.find("textarea").css("height"), "20px", "Height on hidden textarea." );
@@ -42,7 +42,7 @@ test("css(String|Hash)", function() {
 	equal( parseFloat(jQuery("#nothiddendiv").css("width")), 0, "Test negative width set to 0");
 	equal( parseFloat(jQuery("#nothiddendiv").css("height")), 0, "Test negative height set to 0");
 
-	equal( jQuery("<div style='display: none;'/>").css("display"), "none", "Styles on disconnected nodes");
+	equal( jQuery("<div style='display: none;'></div>").css("display"), "none", "Styles on disconnected nodes");
 
 	jQuery("#floatTest").css({"float": "right"});
 	equal( jQuery("#floatTest").css("float"), "right", "Modified CSS float using \"float\": Assert float is right");
@@ -114,7 +114,7 @@ test("css(String|Hash)", function() {
 
 	strictEqual( child.css( "x-fake" ), undefined, "Make sure undefined is returned from css(nonexistent)." );
 
-	div = jQuery( "<div/>" ).css({ position: "absolute", "z-index": 1000 }).appendTo( "#qunit-fixture" );
+	div = jQuery( "<div></div>" ).css({ position: "absolute", "z-index": 1000 }).appendTo( "#qunit-fixture" );
 	strictEqual( div.css( "z-index" ), "1000",
 		"Make sure that a string z-index is returned from css('z-index') (#14432)." );
 });
@@ -512,8 +512,8 @@ test("show();", function() {
 
 test("show() resolves correct default display #8099", function() {
 	expect(7);
-	var tt8099 = jQuery("<tt/>").appendTo("body"),
-			dfn8099 = jQuery("<dfn/>", { "html": "foo"}).appendTo("body");
+	var tt8099 = jQuery("<tt></tt>").appendTo("body"),
+			dfn8099 = jQuery("<dfn></dfn>", { "html": "foo"}).appendTo("body");
 
 	equal( tt8099.css("display"), "none", "default display override for all tt" );
 	equal( tt8099.show().css("display"), "inline", "Correctly resolves display:inline" );
@@ -543,11 +543,11 @@ test( "show() resolves correct default display for detached nodes", function(){
 	div.show().appendTo("#qunit-fixture");
 	equal( div.css("display"), "block", "Make sure a detached, pre-hidden( through inline style ) div is visible." );
 
-	span = jQuery("<span class='hidden'/>");
+	span = jQuery("<span class='hidden'></span>");
 	span.show().appendTo("#qunit-fixture");
 	equal( span.css("display"), "inline", "Make sure a detached, pre-hidden( through stylesheets ) span has default display." );
 
-	span = jQuery("<span style='display: inline'/>");
+	span = jQuery("<span style='display: inline'></span>");
 	span.show().appendTo("#qunit-fixture");
 	equal( span.css("display"), "inline", "Make sure a detached, pre-hidden( through inline style ) span has default display." );
 
@@ -579,12 +579,12 @@ test( "show() resolves correct default display for detached nodes", function(){
 	equal( div.css("display"), "block", "Make sure a pre-created element has default display." );
 	div.remove();
 
-	div = jQuery("<div style='display: inline'/>");
+	div = jQuery("<div style='display: inline'></div>");
 	div.show().appendTo("#qunit-fixture");
 	equal( div.css("display"), "inline", "Make sure that element has same display when it was created." );
 	div.remove();
 
-	tr = jQuery("<tr/>");
+	tr = jQuery("<tr></tr>");
 	jQuery("#table").append( tr );
 	trDisplay = tr.css( "display" );
 	tr.detach().hide().show();
@@ -592,7 +592,7 @@ test( "show() resolves correct default display for detached nodes", function(){
 	equal( tr[ 0 ].style.display, trDisplay, "For detached tr elements, display should always be like for attached trs" );
 	tr.remove();
 
-	span = jQuery("<span/>").hide().show();
+	span = jQuery("<span></span>").hide().show();
 	equal( span[ 0 ].style.display, "inline", "For detached span elements, display should always be inline" );
 	span.remove();
 });
@@ -725,9 +725,9 @@ test("marginRight computed style (bug #3333)", function() {
 test("box model properties incorrectly returning % instead of px, see #10639 and #12088", function() {
 	expect( 2 );
 
-	var container = jQuery("<div/>").width( 400 ).appendTo("#qunit-fixture"),
-		el = jQuery("<div/>").css({ "width": "50%", "marginRight": "50%" }).appendTo( container ),
-		el2 = jQuery("<div/>").css({ "width": "50%", "minWidth": "300px", "marginLeft": "25%" }).appendTo( container );
+	var container = jQuery("<div></div>").width( 400 ).appendTo("#qunit-fixture"),
+		el = jQuery("<div></div>").css({ "width": "50%", "marginRight": "50%" }).appendTo( container ),
+		el2 = jQuery("<div></div>").css({ "width": "50%", "minWidth": "300px", "marginLeft": "25%" }).appendTo( container );
 
 	equal( el.css("marginRight"), "200px", "css('marginRight') returning % instead of px, see #10639" );
 	equal( el2.css("marginLeft"), "100px", "css('marginLeft') returning incorrect pixel value, see #12088" );
@@ -777,15 +777,15 @@ test("can't get css for disconnected in IE<9, see #10254 and #8388", function() 
 	expect( 2 );
 	var span, div;
 
-	span = jQuery( "<span/>" ).css( "background-image", "url(data/1x1.jpg)" );
+	span = jQuery( "<span></span>" ).css( "background-image", "url(data/1x1.jpg)" );
 	notEqual( span.css( "background-image" ), null, "can't get background-image in IE<9, see #10254" );
 
-	div = jQuery( "<div/>" ).css( "top", 10 );
+	div = jQuery( "<div></div>" ).css( "top", 10 );
 	equal( div.css( "top" ), "10px", "can't get top in IE<9, see #8388" );
 });
 
 test("can't get background-position in IE<9, see #10796", function() {
-	var div = jQuery( "<div/>" ).appendTo( "#qunit-fixture" ),
+	var div = jQuery( "<div></div>" ).appendTo( "#qunit-fixture" ),
 		units = [
 			"0 0",
 			"12px 12px",
@@ -1078,7 +1078,7 @@ asyncTest( "Clearing a Cloned Element's Style Shouldn't Clear the Original Eleme
 
 asyncTest( "Make sure initialized display value for disconnected nodes is correct (#13310)", 4, function() {
 	var display = jQuery("#display").css("display"),
-		div = jQuery("<div/>");
+		div = jQuery("<div></div>");
 
 	equal( div.css( "display", "inline" ).hide().show().appendTo("body").css( "display" ), "inline", "Initialized display value has returned" );
 	div.remove();
@@ -1100,7 +1100,7 @@ asyncTest( "Make sure initialized display value for disconnected nodes is correc
 });
 
 test( "show() after hide() should always set display to initial value (#14750)", 1, function() {
-	var div = jQuery( "<div />" ),
+	var div = jQuery( "<div></div>" ),
 		fixture = jQuery( "#qunit-fixture" );
 
 	fixture.append( div );
@@ -1119,7 +1119,7 @@ test( "show() after hide() should always set display to initial value (#14750)",
 
 	if ( exist ) {
 		test( "Don't append px to CSS \"order\" value (#14049)", 1, function() {
-			var $elem = jQuery( "<div/>" );
+			var $elem = jQuery( "<div></div>" );
 
 			$elem.css( "order", 2 );
 			equal( $elem.css( "order" ), "2", "2 on order" );

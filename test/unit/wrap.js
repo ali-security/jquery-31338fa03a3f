@@ -57,7 +57,7 @@ function testWrap( val ) {
 		cacheLength++;
 	}
 
-	j = jQuery("<label/>").wrap( val("<li/>") );
+	j = jQuery("<label></label>").wrap( val("<li></li>") );
 	equal( j[ 0 ] .nodeName.toUpperCase(), "LABEL", "Element is a label" );
 	equal( j[ 0 ].parentNode.nodeName.toUpperCase(), "LI", "Element has been wrapped" );
 
@@ -67,7 +67,7 @@ function testWrap( val ) {
 	equal( cacheLength, 0, "No memory leak in jQuery.cache (bug #7165)" );
 
 	// Wrap an element containing a text node
-	j = jQuery("<span/>").wrap("<div>test</div>");
+	j = jQuery("<span></span>").wrap("<div>test</div>");
 	equal( j[ 0 ].previousSibling.nodeType, 3, "Make sure the previous node is a text element" );
 	equal( j[ 0 ].parentNode.nodeName.toUpperCase(), "DIV", "And that we're in the div element." );
 
@@ -78,7 +78,7 @@ function testWrap( val ) {
 	equal( j[ 0 ].parentNode.nodeName.toUpperCase(), "P", "The span should be in the paragraph." );
 
 	// Wrap an element with a jQuery set
-	j = jQuery("<span/>").wrap( jQuery("<div></div>") );
+	j = jQuery("<span></span>").wrap( jQuery("<div></div>") );
 	equal( j[ 0 ].parentNode.nodeName.toLowerCase(), "div", "Wrapping works." );
 
 	// Wrap an element with a jQuery set and event
@@ -90,7 +90,7 @@ function testWrap( val ) {
 		jQuery(this).off();
 	});
 
-	j = jQuery("<span/>").wrap( result );
+	j = jQuery("<span></span>").wrap( result );
 	equal( j[ 0 ].parentNode.nodeName.toLowerCase(), "div", "Wrapping works." );
 
 	j.parent().trigger("click");
@@ -190,7 +190,7 @@ test( "wrapInner(Element)", function() {
 	expect( 5 );
 
 	var num,
-		div = jQuery("<div/>");
+		div = jQuery("<div></div>");
 
 	num = jQuery("#first").children().length;
 	jQuery("#first").wrapInner( document.getElementById("empty") );
@@ -230,7 +230,7 @@ test( "wrapInner(Function) returns Element", function() {
 
 	var num,
     val = manipulationFunctionReturningObj,
-		div = jQuery("<div/>");
+		div = jQuery("<div></div>");
 
 	num = jQuery("#first").children().length;
 	jQuery("#first").wrapInner( val(document.getElementById("empty")) );

@@ -1867,7 +1867,7 @@ module( "ajax", {
 	asyncTest( "jQuery.fn.load() - 404 error callbacks", 6, function() {
 		addGlobalEvents("ajaxStart ajaxStop ajaxSend ajaxComplete ajaxError")();
 		jQuery( document ).ajaxStop( start );
-		jQuery("<div/>").load( "data/404.html", function() {
+		jQuery("<div></div>").load( "data/404.html", function() {
 			ok( true, "complete" );
 		});
 	});
@@ -1949,7 +1949,7 @@ module( "ajax", {
 				return "Hello World";
 			}
 		});
-		jQuery("<div/>").load( url("data/name.html"), function( responseText ) {
+		jQuery("<div></div>").load( url("data/name.html"), function( responseText ) {
 			strictEqual( jQuery( this ).html(), "Hello World", "Test div was filled with filtered data" );
 			strictEqual( responseText, "Hello World", "Test callback receives filtered data" );
 			start();
@@ -1957,7 +1957,7 @@ module( "ajax", {
 	});
 
 	asyncTest( "jQuery.fn.load( String, Object, Function )", 2, function() {
-		jQuery("<div />").load( url("data/params_html.php"), {
+		jQuery("<div></div>").load( url("data/params_html.php"), {
 			"foo": 3,
 			"bar": "ok"
 		}, function() {
@@ -1969,7 +1969,7 @@ module( "ajax", {
 	});
 
 	asyncTest( "jQuery.fn.load( String, String, Function )", 2, function() {
-		jQuery("<div />").load( url("data/params_html.php"), "foo=3&bar=ok", function() {
+		jQuery("<div></div>").load( url("data/params_html.php"), "foo=3&bar=ok", function() {
 			var $get = jQuery( this ).find("#get");
 			strictEqual( $get.find("#foo").text(), "3", "Check if a string of data is passed correctly" );
 			strictEqual( $get.find("#bar").text(), "ok", "Check if a   of data is passed correctly" );

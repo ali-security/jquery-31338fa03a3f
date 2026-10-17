@@ -145,7 +145,7 @@ test("on(), multiple events at once and namespaces", function() {
 	var cur, div,
 		obj = {};
 
-	div = jQuery("<div/>").on("focusin.a", function(e) {
+	div = jQuery("<div></div>").on("focusin.a", function(e) {
 		equal( e.type, cur, "Verify right single event was fired." );
 	});
 
@@ -155,7 +155,7 @@ test("on(), multiple events at once and namespaces", function() {
 	// manually clean up detached elements
 	div.remove();
 
-	div = jQuery("<div/>").on("click mouseover", obj, function(e) {
+	div = jQuery("<div></div>").on("click mouseover", obj, function(e) {
 		equal( e.type, cur, "Verify right multi event was fired." );
 		equal( e.data, obj, "Make sure the data came in correctly." );
 	});
@@ -169,7 +169,7 @@ test("on(), multiple events at once and namespaces", function() {
 	// manually clean up detached elements
 	div.remove();
 
-	div = jQuery("<div/>").on("focusin.a focusout.b", function(e) {
+	div = jQuery("<div></div>").on("focusin.a focusout.b", function(e) {
 		equal( e.type, cur, "Verify right multi event was fired." );
 	});
 
@@ -187,7 +187,7 @@ test("on(), namespace with special add", function() {
 	expect(27);
 
 	var i = 0,
-		div = jQuery("<div/>").appendTo("#qunit-fixture").on( "test", function() {
+		div = jQuery("<div></div>").appendTo("#qunit-fixture").on( "test", function() {
 			ok( true, "Test event fired." );
 		});
 
@@ -236,7 +236,7 @@ test("on(), namespace with special add", function() {
 	// Should trigger 4
 	div.off("test");
 
-	div = jQuery("<div/>").on( "test", function() {
+	div = jQuery("<div></div>").on( "test", function() {
 		ok( true, "Test event fired." );
 	});
 
@@ -850,7 +850,7 @@ test("mouseover triggers mouseenter", function() {
 	expect(1);
 
 	var count = 0,
-		elem = jQuery("<a />");
+		elem = jQuery("<a></a>");
 	elem.on( "mouseenter", function () {
 		count++;
 	});
@@ -864,7 +864,7 @@ test("pointerover triggers pointerenter", function() {
 	expect(1);
 
 	var count = 0,
-		elem = jQuery("<a />");
+		elem = jQuery("<a></a>");
 	elem.on( "pointerenter", function () {
 		count++;
 	});
@@ -956,7 +956,7 @@ if ( jQuery.fn.click ) {
 		elem.remove();
 
 		// test that special handlers do not blow up with VML elements (#7071)
-		jQuery("<xml:namespace ns='urn:schemas-microsoft-com:vml' prefix='v' />").appendTo("head");
+		jQuery("<xml:namespace ns='urn:schemas-microsoft-com:vml' prefix='v'></xml:namespace>").appendTo("head");
 		jQuery("<v:oval id='oval' style='width:100pt;height:75pt;' fillcolor='red'> </v:oval>").appendTo("#form");
 		jQuery("#oval").click().keydown();
 	});
@@ -1105,7 +1105,7 @@ test( "submit event bubbles on copied forms (#11649)", function() {
 	var $formByClone, $formByHTML,
 		$testForm = jQuery("#testForm"),
 		$fixture = jQuery("#qunit-fixture"),
-		$wrapperDiv = jQuery("<div/>").appendTo( $fixture );
+		$wrapperDiv = jQuery("<div></div>").appendTo( $fixture );
 
 	function noSubmit( e ) {
 		e.preventDefault();
@@ -1141,7 +1141,7 @@ test( "change event bubbles on copied forms (#11796)", function(){
 	var $formByClone, $formByHTML,
 		$form = jQuery("#form"),
 		$fixture = jQuery("#qunit-fixture"),
-		$wrapperDiv = jQuery("<div/>").appendTo( $fixture );
+		$wrapperDiv = jQuery("<div></div>").appendTo( $fixture );
 
 	function delegatedChange() {
 		ok( true, "Make sure change event bubbles up." );
@@ -1171,7 +1171,7 @@ test("trigger(eventObject, [data], [fn])", function() {
 	expect(28);
 
 	var event,
-		$parent = jQuery("<div id='par' />").appendTo("body"),
+		$parent = jQuery("<div id='par'></div>").appendTo("body"),
 		$child = jQuery("<p id='child'>foo</p>").appendTo( $parent );
 
 	$parent.get( 0 ).style.display = "none";
@@ -1441,7 +1441,7 @@ if ( window.onbeforeunload === null &&
 		var win,
 			forIE6 = 0,
 			fired = false,
-			iframe = jQuery("<iframe src='data/iframe.html' />");
+			iframe = jQuery("<iframe src='data/iframe.html'></iframe>");
 
 		iframe.appendTo("#qunit-fixture").one( "load", function() {
 			win = this.contentWindow || this.contentDocument;
@@ -1481,7 +1481,7 @@ if ( window.onbeforeunload === null &&
 
 			function checker() {
 				ok( true, "window.onbeforeunload handler is called" );
-				iframe = jQuery("<iframe src='data/iframe.html' />");
+				iframe = jQuery("<iframe src='data/iframe.html'></iframe>");
 
 				iframe.appendTo("#qunit-fixture").one( "load", function() {
 					win = iframe[ 0 ].contentWindow || iframe[ 0 ].contentDocument;

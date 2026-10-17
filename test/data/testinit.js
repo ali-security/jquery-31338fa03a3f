@@ -223,7 +223,7 @@ this.testIframe = function( fileName, name, fn ) {
 
 	function loadFixture() {
 		var src = url( "./data/" + fileName + ".html" ),
-			iframe = jQuery( "<iframe />" ).appendTo( "body" )[ 0 ];
+			iframe = jQuery( "<iframe></iframe>" ).appendTo( "body" )[ 0 ];
 			iframe.style.cssText = "width: 500px; height: 500px; position: absolute; top: -600px; left: -600px; visibility: hidden;";
 
 		iframe.contentWindow.location = src;
@@ -251,8 +251,8 @@ this.testIframeWithCallback = function( title, fileName, func ) {
 				start();
 			}, 0 );
 		};
-		iframe = jQuery( "<div/>" ).css({ position: "absolute", width: "500px", left: "-600px" })
-			.append( jQuery( "<iframe/>" ).attr( "src", url( "./data/" + fileName ) ) )
+		iframe = jQuery( "<div></div>" ).css({ position: "absolute", width: "500px", left: "-600px" })
+			.append( jQuery( "<iframe></iframe>" ).attr( "src", url( "./data/" + fileName ) ) )
 			.appendTo( "#qunit-fixture" );
 	});
 };

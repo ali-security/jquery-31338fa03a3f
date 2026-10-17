@@ -403,7 +403,7 @@ test(".data(Object)", function() {
 	expect(4);
 
 	var obj, jqobj,
-		div = jQuery("<div/>");
+		div = jQuery("<div></div>");
 
 	div.data({ "test": "in", "test2": "in2" });
 	equal( div.data("test"), "in", "Verify setting an object in data" );
@@ -529,7 +529,7 @@ test("jQuery.data should not miss data with preset hyphenated property names", f
 
 	expect(2);
 
-	var div = jQuery("<div/>", { id: "hyphened" }).appendTo("#qunit-fixture"),
+	var div = jQuery("<div></div>", { id: "hyphened" }).appendTo("#qunit-fixture"),
 		test = {
 			"camelBar": "camelBar",
 			"hyphen-foo": "hyphen-foo"
@@ -544,7 +544,7 @@ test("jQuery.data should not miss data with preset hyphenated property names", f
 
 test("jQuery.data supports interoperable hyphenated/camelCase get/set of properties with arbitrary non-null|NaN|undefined values", function() {
 
-	var div = jQuery("<div/>", { id: "hyphened" }).appendTo("#qunit-fixture"),
+	var div = jQuery("<div></div>", { id: "hyphened" }).appendTo("#qunit-fixture"),
 		datas = {
 			"non-empty": "a string",
 			"empty-string": "",
@@ -574,7 +574,7 @@ test("jQuery.data supports interoperable hyphenated/camelCase get/set of propert
 });
 
 test("jQuery.data supports interoperable removal of hyphenated/camelCase properties", function() {
-	var div = jQuery("<div/>", { id: "hyphened" }).appendTo("#qunit-fixture"),
+	var div = jQuery("<div></div>", { id: "hyphened" }).appendTo("#qunit-fixture"),
 		datas = {
 			"non-empty": "a string",
 			"empty-string": "",

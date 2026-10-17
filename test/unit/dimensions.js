@@ -305,7 +305,7 @@ test("getting dimensions shouldn't modify runtimeStyle see #9233", function() {
 });
 
 test( "table dimensions", 2, function() {
-	var table = jQuery("<table><colgroup><col/><col/></colgroup><tbody><tr><td></td><td>a</td></tr><tr><td></td><td>a</td></tr></tbody></table>").appendTo("#qunit-fixture"),
+	var table = jQuery("<table><colgroup><col></col><col></col></colgroup><tbody><tr><td></td><td>a</td></tr><tr><td></td><td>a</td></tr></tbody></table>").appendTo("#qunit-fixture"),
 		tdElem = table.find("td").first(),
 		colElem = table.find("col").first().width( 300 );
 

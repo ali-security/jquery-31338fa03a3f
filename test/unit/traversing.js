@@ -197,7 +197,7 @@ test("index()", function() {
 
 	equal( jQuery("#text2").index(), 2, "Returns the index of a child amongst its siblings" );
 
-	equal( jQuery("<div/>").index(), -1, "Node without parent returns -1" );
+	equal( jQuery("<div></div>").index(), -1, "Node without parent returns -1" );
 });
 
 test("index(Object|String|undefined)", function() {
@@ -434,7 +434,7 @@ test("has(Element)", function() {
 	obj = jQuery("#qunit-fixture").has(jQuery("#sndp")[0]);
 	deepEqual( obj.get(), q("qunit-fixture"), "Keeps elements that have the element as a descendant" );
 
-	detached = jQuery("<a><b><i/></b></a>");
+	detached = jQuery("<a><b><i></i></b></a>");
 	deepEqual( detached.has( detached.find("i")[0] ).get(), detached.get(), "...Even when detached" );
 
 	multipleParent = jQuery("#qunit-fixture, #header").has(jQuery("#sndp")[0]);
@@ -449,7 +449,7 @@ test("has(Selector)", function() {
 	obj = jQuery("#qunit-fixture").has("#sndp");
 	deepEqual( obj.get(), q("qunit-fixture"), "Keeps elements that have any element matching the selector as a descendant" );
 
-	detached = jQuery("<a><b><i/></b></a>");
+	detached = jQuery("<a><b><i></i></b></a>");
 	deepEqual( detached.has("i").get(), detached.get(), "...Even when detached" );
 
 	multipleParent = jQuery("#qunit-fixture, #header").has("#sndp");
@@ -470,7 +470,7 @@ test("has(Arrayish)", function() {
 	simple = jQuery("#qunit-fixture").has(jQuery("#sndp"));
 	deepEqual( simple.get(), q("qunit-fixture"), "Keeps elements that have any element in the jQuery list as a descendant" );
 
-	detached = jQuery("<a><b><i/></b></a>");
+	detached = jQuery("<a><b><i></i></b></a>");
 	deepEqual( detached.has( detached.find("i") ).get(), detached.get(), "...Even when detached" );
 
 	multipleParent = jQuery("#qunit-fixture, #header").has(jQuery("#sndp"));
@@ -498,7 +498,7 @@ test("siblings([String])", function() {
 	var set = q("sndp", "en", "sap");
 	deepEqual( jQuery("#en, #sndp").siblings().get(), set, "Check for unique results from siblings" );
 	deepEqual( jQuery("#option5a").siblings("option[data-attr]").get(), q("option5c"), "Has attribute selector in siblings (#9261)" );
-	equal( jQuery("<a/>").siblings().length, 0, "Detached elements have no siblings (#11370)" );
+	equal( jQuery("<a></a>").siblings().length, 0, "Detached elements have no siblings (#11370)" );
 });
 
 test("siblings([String]) - jQuery only", function() {
@@ -665,7 +665,7 @@ test("contents()", function() {
 
 	equal( jQuery("div", ibody).text(), "span text", "Make sure the correct div is still left after deletion in IFrame" );
 
-	jQuery("<table/>", ibody).append("<tr><td>cell</td></tr>").appendTo(ibody);
+	jQuery("<table></table>", ibody).append("<tr><td>cell</td></tr>").appendTo(ibody);
 	jQuery("table", ibody).remove();
 	equal( jQuery("div", ibody).length, 1, "Check for JS error on add and delete of a table in IFrame" );
 
@@ -712,7 +712,7 @@ test("add(String selector)", function() {
 		"Check elements from document"
 	);
 
-	divs = jQuery("<div/>").add("#sndp");
+	divs = jQuery("<div></div>").add("#sndp");
 	ok( divs[0].parentNode, "Sort with the disconnected node last (started with disconnected first)." );
 });
 
@@ -730,7 +730,7 @@ test("add(String html)", function() {
 	expect( 3 );
 
 	var x,
-		divs = jQuery("#sndp").add("<div/>");
+		divs = jQuery("#sndp").add("<div></div>");
 
 	ok( !divs[1].parentNode, "Sort with the disconnected node last." );
 
@@ -744,7 +744,7 @@ test("add(jQuery)", function() {
 	expect( 4 );
 
 	var x,
-		tmp = jQuery("<div/>");
+		tmp = jQuery("<div></div>");
 
 	x = jQuery([])
 	.add(
@@ -773,7 +773,7 @@ test("add(Element)", function() {
 	expect( 2 );
 
 	var x,
-		tmp = jQuery("<div/>");
+		tmp = jQuery("<div></div>");
 
 	x = jQuery([]).add(jQuery("<p id='x1'>xxx</p>").appendTo(tmp)[0]).add(jQuery("<p id='x2'>xxx</p>").appendTo(tmp)[0]);
 	equal( x[0].id, "x1", "Check on-the-fly element1" );
