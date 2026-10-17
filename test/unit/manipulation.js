@@ -2490,3 +2490,78 @@ asyncTest( "Handlers hidden in raw text or comments are not executed (CVE-2020-1
 		start();
 	}, 2000 );
 });
+
+// Support: IE<=9
+// Native check (independent of jQuery.support) of whether the browser keeps
+// <option> outside of a <select>; where it doesn't, jQuery still has to wrap it.
+function optionParsedOutsideSelect() {
+	var div = document.createElement("div");
+	div.innerHTML = "<option></option>";
+	return !!div.lastChild;
+}
+
+test( "<option> and <optgroup> are not parsed inside a <select> wrapper (CVE-2020-11023)", function() {
+
+	expect( 16 );
+
+	var payloads = {
+			"option, raw text": "<option><style></option></select><img src=x></style>",
+			"optgroup, raw text": "<optgroup><style></optgroup></select><img src=x></style>",
+			"option, stray </select>": "<option>a</option></select><b>b</b>",
+			"optgroup, stray </select>": "<optgroup label='g'></optgroup></select><b>b</b>"
+		},
+		optionSupported = optionParsedOutsideSelect();
+
+	jQuery.each( payloads, function( label, payload ) {
+		var reference = document.createElement("div");
+
+		if ( !optionSupported ) {
+			ok( true, "option/optgroup still wrapped in a select; skipping - " + label );
+			ok( true, "option/optgroup still wrapped in a select; skipping - " + label );
+			ok( true, "option/optgroup still wrapped in a select; skipping - " + label );
+			ok( true, "option/optgroup still wrapped in a select; skipping - " + label );
+			return;
+		}
+
+		// What the browser itself parses in a <div>, i.e. what an HTML sanitizer checked
+		reference.innerHTML = payload;
+
+		equal( jQuery("<div></div>").html( payload ).html(), reference.innerHTML,
+			"html(): parsed like the browser does in a div - " + label );
+		equal( jQuery("<div></div>").append( payload ).html(), reference.innerHTML,
+			"append(): parsed like the browser does in a div - " + label );
+		equal( jQuery("<div></div>").prepend( payload ).html(), reference.innerHTML,
+			"prepend(): parsed like the browser does in a div - " + label );
+		equal( jQuery("<div></div>").append( jQuery( payload ) ).html(), reference.innerHTML,
+			"jQuery(html): parsed like the browser does in a div - " + label );
+	});
+});
+
+asyncTest( "Handlers hidden in <option> or <optgroup> markup are not executed (CVE-2020-11023)", function() {
+
+	expect( 1 );
+
+	var fixture = jQuery("#qunit-fixture"),
+		img = "<img src=x onerror='cve202011023Executed = true;'>",
+		option = "<option><style></option></select>" + img + "</style>",
+		optgroup = "<optgroup><style></optgroup></select>" + img + "</style>";
+
+	Globals.register("cve202011023Executed");
+	jQuery.globalEval("cve202011023Executed = false;");
+
+	if ( optionParsedOutsideSelect() ) {
+		jQuery("<div></div>").appendTo( fixture ).html( option );
+		jQuery("<div></div>").appendTo( fixture ).html( optgroup );
+		jQuery("<div></div>").appendTo( fixture ).append( option );
+		jQuery("<div></div>").appendTo( fixture ).prepend( optgroup );
+		jQuery("<div></div>").appendTo( fixture ).after( option ).before( optgroup );
+		jQuery("<div></div>").appendTo( fixture ).replaceWith( option );
+		jQuery( optgroup ).appendTo( fixture );
+		jQuery.parseHTML( option );
+	}
+
+	window.setTimeout(function() {
+		strictEqual( window.cve202011023Executed, false, "onerror handler was not executed" );
+		start();
+	}, 2000 );
+});
